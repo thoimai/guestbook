@@ -22,3 +22,51 @@ Task 8: Updated index page of the deployed Guestbook – v2 application after ro
 Task 9: The revision history for the deployment after rollout of the deployment. (2 points)
 
 Task 10: The udpated deployment after Rollback of the update. (2 points)
+
+
+---
+* command to see the history of deployment rollouts:
+
+[theia: guestbook]$ kubectl rollout history deployment/guestbook
+deployment.apps/guestbook 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+*  command to see the details of Revision of the deployment rollout:
+
+[theia: guestbook]$ kubectl rollout history deployments guestbook --revision=2
+deployment.apps/guestbook with revision #2
+Pod Template:
+  Labels:       app=guestbook
+        pod-template-hash=569c45d59c
+  Containers:
+   guestbook:
+    Image:      us.icr.io/sn-labs-u1513319/guestbook:v2
+    Port:       3000/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:      5m
+    Requests:
+      cpu:      2m
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+
+* command to get the replica sets and observe the deployment which is being used now:
+[theia: guestbook]$ kubectl get rs
+NAME                              DESIRED   CURRENT   READY   AGE
+guestbook-569c45d59c              1         1         1       7m18s
+guestbook-69bdc89c56              0         0         0       36m
+openshift-web-console-8979686c9   2         2         2       49m
+
+* command to undo the deploymnent and set it to Revision 1:
+[theia: guestbook]$ kubectl rollout undo deployment/guestbook --to-revision=1
+deployment.apps/guestbook rolled back
+
+* command to get the replica sets after the Rollout has been undone. The deployment being used would have changed as below:
+[theia: guestbook]$ kubectl get rs
+NAME                              DESIRED   CURRENT   READY   AGE
+guestbook-569c45d59c              1         1         1       7m58s
+guestbook-69bdc89c56              1         1         0       37m
+openshift-web-console-8979686c9   2         2         2       50m

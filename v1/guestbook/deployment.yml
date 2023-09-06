@@ -20,7 +20,7 @@ spec:
         app: guestbook
     spec:
       containers:
-      - image: us.icr.io/sn-labs-u1513319/guestbook:v1
+      - image: us.icr.io/sn-labs-u1513319/guestbook:v2
         imagePullPolicy: Always
         name: guestbook
         ports:
